@@ -1,0 +1,11 @@
+﻿.day-container{
+    height: 70px;
+    width: 70px;
+}
+
+.hours-label-container{
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}

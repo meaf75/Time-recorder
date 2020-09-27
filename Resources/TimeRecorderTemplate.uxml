@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UXML xmlns="UnityEngine.UIElements">
+
+    <VisualElement class="header-container">
+        <Button name="btn-prev-month" text="←"/>
+        <Label  name="label-date" text="20-09-2020"/>
+        <Button name="btn-next-month" text="→"/>
+    </VisualElement>
+
+    <VisualElement name="days-container" class="days-container">
+
+    </VisualElement>
+</UXML>

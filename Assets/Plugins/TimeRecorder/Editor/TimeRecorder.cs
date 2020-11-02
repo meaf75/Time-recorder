@@ -17,14 +17,11 @@ namespace Meaf75.Unity{
         private const string TIME_RECORDER_REGISTRY = "time_recorder_registry";
         private const string NEXT_SAVE_TIME_PREF = "next_save_time_recorder";
 
-        private const string CORRUPTED_JSON_BACKUP = "currupted_time_recorder_json_{0}.json";
+        private const string CORRUPTED_JSON_BACKUP = "corrupted_time_recorder_json_{0}.json";
         public const string TIME_RECORDER_WINDOW_P_PREF = "time_recorder_window_player_pref";
 
         private static DateTime nextSaveTime;
-        private static int saveOnMinutes = 5;
-
-        /// <summary> Seconds </summary>
-        private static double repaintInterval = 2;
+        private static int saveOnMinutes = 1;
 
         private static DateTime nextRepaint;
 
@@ -39,24 +36,11 @@ namespace Meaf75.Unity{
             EditorApplication.quitting += () => SaveTimeRecorded(false);
         }
 
-        /// <summary> Repaint window & excecute TimeRecoder logic here instead of EditorApplication.update while window is open </summary>
-        private void Update(){
-
-            var currentTime = DateTime.Now;
-
-            // Debug.Log($"{nextRefresh} vs {currentTime} = {nextRefresh < currentTime}");
-
-            // Repaint window
-            if(nextRepaint < currentTime){
-                // Update countdown
-//                Debug.Log("voy a repintar");
-                nextRepaint = currentTime.AddSeconds(repaintInterval);
-//                Repaint();
-            }
-        }
-
         /// <summary> Update plugin in unity editor update event </summary>
         private static void TimeRecorderUpdate(){
+
+//            return;
+
             // Initialize to start Time recorder
             InitializeSaveTime();
 
@@ -91,21 +75,22 @@ namespace Meaf75.Unity{
             // parse stored json data
             try{
                 // Is a new time recorder?
-                if(string.IsNullOrEmpty(timeRecorderJson))
+                if(string.IsNullOrEmpty(timeRecorderJson)){
                     timeRecorderInfo = InitializeTimeRecorder();
-                else
+                } else{
                     timeRecorderInfo = JsonUtility.FromJson<TimeRecorderInfo>(timeRecorderJson);
+                }
 
-            } catch(Exception){
-                Debug.LogError("Any error ocurred trying to parse TimeRecorder JSON, a json file backup will be generated & data will be refreshed");
+            } catch(Exception e){
+                Debug.LogError("Any error ocurred trying to parse TimeRecorder JSON, a json file backup will be generated & data will be refreshed: "+e);
 
                 PlayerPrefs.DeleteKey(TIME_RECORDER_REGISTRY);
+                PlayerPrefs.Save();
 
                 // Save local backgup
                 string fileName = string.Format(CORRUPTED_JSON_BACKUP, DateTime.Now.Ticks);
                 string path = Path.Combine(Application.dataPath, fileName);
                 Task saveBackup = WriteTextAsync(path, timeRecorderJson);
-                Task.Run(() => saveBackup);
 
                 // Save Data into the next iteration
                 return false;
@@ -208,9 +193,14 @@ namespace Meaf75.Unity{
 
         private static TimeRecorderInfo InitializeTimeRecorder(){
 
+            Debug.Log("Inicializando time recorder");
+
             DateTime dateTime = DateTime.Now;
 
-            timeRecorderInfo = new TimeRecorderInfo();
+            timeRecorderInfo = new TimeRecorderInfo(){
+                years =  new List<YearInfo>(),
+                totalRecordedTime = 0
+            };
 
             // Setup current year
             var year = new YearInfo(){
@@ -241,7 +231,7 @@ namespace Meaf75.Unity{
             PlayerPrefs.SetString(TIME_RECORDER_REGISTRY, timeRecorderJson);
             PlayerPrefs.Save();
 
-            Debug.Log("Inicializando time recorder");
+            Debug.Log("Time recorder initialized");
 
             return timeRecorderInfo;
         }
@@ -284,15 +274,6 @@ namespace Meaf75.Unity{
             return textNextSave;
         }
 
-        private void OnEnable(){
-            Instance = this;
-        }
-
-        /// <summary> Is this window open? </summary>
-        private static bool IsOpen {
-            get { return Instance != null; }
-        }
-
         /// <summary> Returns TimeRecorderInfo based on the registry JSON data </summary>
         public static TimeRecorderInfo LoadTimeRecorderInfoFromRegistry(){
             string timeRecorderJson = PlayerPrefs.GetString(TIME_RECORDER_REGISTRY, "");
@@ -320,4 +301,3 @@ namespace Meaf75.Unity{
         }
     }
 }
-

@@ -9,9 +9,9 @@ using UnityEditor;
 using UnityEngine;
 
 namespace Meaf75.Unity{
-    [InitializeOnLoad]
-    public class TimeRecorder : EditorWindow{
 
+    [InitializeOnLoad]
+    public class TimeRecorder {
         public static TimeRecorder Instance;
 
         private const string TIME_RECORDER_REGISTRY = "time_recorder_registry";
@@ -28,7 +28,7 @@ namespace Meaf75.Unity{
 
         private static DateTime nextRepaint;
 
-        private static TimeRecorderInfo timeRecorderInfo;
+        public static TimeRecorderInfo timeRecorderInfo;
 
         private string registry_json;
 
@@ -51,7 +51,7 @@ namespace Meaf75.Unity{
                 // Update countdown
 //                Debug.Log("voy a repintar");
                 nextRepaint = currentTime.AddSeconds(repaintInterval);
-                Repaint();
+//                Repaint();
             }
         }
 
@@ -69,7 +69,7 @@ namespace Meaf75.Unity{
             if(nextSaveTime < DateTime.Now){
 
                 if(EditorApplication.timeSinceStartup < saveOnMinutes * 60){    // minutes to secods, timeSinceStartup is stored in seconds
-                    Debug.Log("////////// No cabron no voy a guardar ////////////");
+//                    Debug.Log("////////// No cabron no voy a guardar ////////////");
 
                     // If true probably Unity Editor started recently
                     ReCalculateNextSave();
@@ -199,7 +199,10 @@ namespace Meaf75.Unity{
             PlayerPrefs.SetString(TIME_RECORDER_REGISTRY, timeRecorderJson);
             PlayerPrefs.Save();
 
-            Debug.Log("Ahora guardoooooo");
+            if(TimeRecorderWindow.Instance)
+                TimeRecorderWindow.Instance.RepaintWindow();
+
+            Debug.Log("Your develop time has been tracked");
             return true;
         }
 
@@ -207,10 +210,7 @@ namespace Meaf75.Unity{
 
             DateTime dateTime = DateTime.Now;
 
-            timeRecorderInfo = new TimeRecorderInfo{
-                years = new List<YearInfo>(),
-                totalRecordedTime = 0
-            };
+            timeRecorderInfo = new TimeRecorderInfo();
 
             // Setup current year
             var year = new YearInfo(){
@@ -269,7 +269,7 @@ namespace Meaf75.Unity{
         /// <summary> Calculate new save time </summary>
         private static string ReCalculateNextSave(){
 
-            Debug.Log("Haciendo la recalculacion");
+//            Debug.Log("Haciendo la recalculacion");
 
             // Create new reference of the next save time
             nextSaveTime = DateTime.Now;
@@ -284,12 +284,6 @@ namespace Meaf75.Unity{
             return textNextSave;
         }
 
-        /// <summary> Timespan to HH:MM:SS </summary>
-        /// <param name="timeSpan">timeSpan to transform</param>
-        private static string FormatSpanToTime(TimeSpan timeSpan){
-            return $"{timeSpan.Hours}H:{timeSpan.Minutes}M:{timeSpan.Seconds}S";
-        }
-
         private void OnEnable(){
             Instance = this;
         }
@@ -297,6 +291,22 @@ namespace Meaf75.Unity{
         /// <summary> Is this window open? </summary>
         private static bool IsOpen {
             get { return Instance != null; }
+        }
+
+        /// <summary> Returns TimeRecorderInfo based on the registry JSON data </summary>
+        public static TimeRecorderInfo LoadTimeRecorderInfoFromRegistry(){
+            string timeRecorderJson = PlayerPrefs.GetString(TIME_RECORDER_REGISTRY, "");
+
+            try{
+                // Get data
+                var timeRecorderInfoData = JsonUtility.FromJson<TimeRecorderInfo>(timeRecorderJson);
+                return timeRecorderInfoData;
+            } catch(Exception){
+                Debug.LogError("Your time recorder registry JSON data is corrupted, please restart the Unity Editor");
+            }
+
+            // Return cached timeRecorderInfo data
+            return timeRecorderInfo;
         }
 
         private static async Task WriteTextAsync(string filePath, string text){

@@ -21,7 +21,7 @@ namespace Meaf75.Unity{
         public const string TIME_RECORDER_WINDOW_P_PREF = "time_recorder_window_player_pref";
 
         private static DateTime nextSaveTime;
-        private static int saveOnMinutes = 1;
+        private static int saveOnMinutes = 5;
 
         private static DateTime nextRepaint;
 

@@ -8,9 +8,22 @@ Easy way to track develop work time while unity editor is open, track your devel
 - Make sure only copy repo assets folder into your assets/plugins folder inside your project
 - Have installed UIElements package for unity
 
-You can find the time recorder window in Window/Meaf75/Time recorder
+You can find the time recorder window at Window/Meaf75/Time recorder
 
 ![Image of time recorder path](./img/time-recorder-path.png)
+
+# Time recorder tools
+
+You can find the time recorder tools at Window/Meaf75/Time recorder tools
+![Image of time recorder tools path](./img/time-recorder-tools-path.png)
+
+- In the case you want to make a backup of you "time recorder" data you can make a file backup with the "Generate backup" option.
+
+- I case you want to restore your time recorded data, you can use a backup file to restore your "Time recorder" data
+
+![Time recorder tools](./img/time-recorder-tools.png)
+
+
 
 # Extra info
 - TimeRecorder automatically start their process on open your Unity Project.

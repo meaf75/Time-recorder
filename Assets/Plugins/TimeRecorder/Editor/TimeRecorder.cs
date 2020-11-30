@@ -14,12 +14,6 @@ namespace Meaf75.Unity{
     public class TimeRecorder {
         public static TimeRecorder Instance;
 
-        private const string TIME_RECORDER_REGISTRY = "time_recorder_registry";
-        private const string NEXT_SAVE_TIME_PREF = "next_save_time_recorder";
-
-        private const string CORRUPTED_JSON_BACKUP = "corrupted_time_recorder_json_{0}.json";
-        public const string TIME_RECORDER_WINDOW_P_PREF = "time_recorder_window_player_pref";
-
         private static DateTime nextSaveTime;
         private static int saveOnMinutes = 5;
 
@@ -39,8 +33,6 @@ namespace Meaf75.Unity{
         /// <summary> Update plugin in unity editor update event </summary>
         private static void TimeRecorderUpdate(){
 
-//            return;
-
             // Initialize to start Time recorder
             InitializeSaveTime();
 
@@ -53,7 +45,7 @@ namespace Meaf75.Unity{
             if(nextSaveTime < DateTime.Now){
 
                 if(EditorApplication.timeSinceStartup < saveOnMinutes * 60){    // minutes to secods, timeSinceStartup is stored in seconds
-//                    Debug.Log("////////// No cabron no voy a guardar ////////////");
+//                    Debug.Log("////////// No sr no voy a guardar ////////////");
 
                     // If true probably Unity Editor started recently
                     ReCalculateNextSave();
@@ -70,7 +62,7 @@ namespace Meaf75.Unity{
         }
 
         private static bool SaveTimeRecorded(bool countdownCompleted){
-            string timeRecorderJson = PlayerPrefs.GetString(TIME_RECORDER_REGISTRY, "");
+            string timeRecorderJson = PlayerPrefs.GetString(TimeRecorderExtras.TIME_RECORDER_REGISTRY, "");
 
             // parse stored json data
             try{
@@ -84,11 +76,11 @@ namespace Meaf75.Unity{
             } catch(Exception e){
                 Debug.LogError("Any error ocurred trying to parse TimeRecorder JSON, a json file backup will be generated & data will be refreshed: "+e);
 
-                PlayerPrefs.DeleteKey(TIME_RECORDER_REGISTRY);
+                PlayerPrefs.DeleteKey(TimeRecorderExtras.TIME_RECORDER_REGISTRY);
                 PlayerPrefs.Save();
 
                 // Save local backgup
-                string fileName = string.Format(CORRUPTED_JSON_BACKUP, DateTime.Now.Ticks);
+                string fileName = string.Format(TimeRecorderExtras.CORRUPTED_JSON_BACKUP, DateTime.Now.Ticks);
                 string path = Path.Combine(Application.dataPath, fileName);
                 Task saveBackup = WriteTextAsync(path, timeRecorderJson);
 
@@ -181,7 +173,7 @@ namespace Meaf75.Unity{
             // Save the registry
             timeRecorderJson = JsonUtility.ToJson(timeRecorderInfo);
 
-            PlayerPrefs.SetString(TIME_RECORDER_REGISTRY, timeRecorderJson);
+            PlayerPrefs.SetString(TimeRecorderExtras.TIME_RECORDER_REGISTRY, timeRecorderJson);
             PlayerPrefs.Save();
 
             if(TimeRecorderWindow.Instance)
@@ -228,7 +220,7 @@ namespace Meaf75.Unity{
             // Save the registry
             string timeRecorderJson = JsonUtility.ToJson(timeRecorderInfo);
 
-            PlayerPrefs.SetString(TIME_RECORDER_REGISTRY, timeRecorderJson);
+            PlayerPrefs.SetString(TimeRecorderExtras.TIME_RECORDER_REGISTRY, timeRecorderJson);
             PlayerPrefs.Save();
 
             Debug.Log("Time recorder initialized");
@@ -244,7 +236,7 @@ namespace Meaf75.Unity{
             }
 
             // Get reference to the next datetime ticks to save
-            string textNextSave = PlayerPrefs.GetString(NEXT_SAVE_TIME_PREF, "");
+            string textNextSave = PlayerPrefs.GetString(TimeRecorderExtras.NEXT_SAVE_TIME_PREF, "");
 
             if(string.IsNullOrEmpty(textNextSave)){
                 // Refresh save time
@@ -268,7 +260,7 @@ namespace Meaf75.Unity{
             // I cannot save ticks as setInt into my player pref
             string textNextSave = nextSaveTime.Ticks.ToString();
 
-            PlayerPrefs.SetString(NEXT_SAVE_TIME_PREF, textNextSave);
+            PlayerPrefs.SetString(TimeRecorderExtras.NEXT_SAVE_TIME_PREF, textNextSave);
             PlayerPrefs.Save();
 
             return textNextSave;
@@ -276,7 +268,7 @@ namespace Meaf75.Unity{
 
         /// <summary> Returns TimeRecorderInfo based on the registry JSON data </summary>
         public static TimeRecorderInfo LoadTimeRecorderInfoFromRegistry(){
-            string timeRecorderJson = PlayerPrefs.GetString(TIME_RECORDER_REGISTRY, "");
+            string timeRecorderJson = PlayerPrefs.GetString(TimeRecorderExtras.TIME_RECORDER_REGISTRY, "");
 
             try{
                 // Get data

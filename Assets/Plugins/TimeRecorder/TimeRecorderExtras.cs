@@ -46,9 +46,11 @@ namespace Meaf75.Unity{
     }
 
     public static class TimeRecorderExtras{
-        public static bool IsDefault(this TimeRecorderInfo timeRecorderInfo){
-            return timeRecorderInfo.Equals(default(TimeRecorderInfo));
-        }
+        public const string TIME_RECORDER_REGISTRY = "time_recorder_registry";
+        public const string NEXT_SAVE_TIME_PREF = "next_save_time_recorder";
+
+        public const string CORRUPTED_JSON_BACKUP = "corrupted_time_recorder_json_{0}.json";
+        public const string TIME_RECORDER_WINDOW_P_PREF = "time_recorder_window_player_pref";
     }
 }
 

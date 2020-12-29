@@ -16,6 +16,10 @@
     border-color: #2b2b2b;
 }
 
+.dev-time-label {
+    -unity-text-align: upper-center;
+}
+
 .header-container{
     display: flex;
     flex-direction: row;
@@ -35,3 +39,13 @@
 .selected-date-label {
     width: 120px;
 }
+
+.label-total-dev-time {
+    -unity-text-align: upper-right;
+}
+
+.total-time-labels-container {
+    flex-direction: row;
+}
+
+

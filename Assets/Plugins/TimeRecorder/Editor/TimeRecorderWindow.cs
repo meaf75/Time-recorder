@@ -79,7 +79,7 @@ namespace Meaf75.Unity{
 
             // Set total label dev time
             var totalDevLabel = root.Q<Label>("label-total-dev-time");
-            totalDevLabel.text = "Total dev time: " + GetLabel(info?.totalRecordedTime ?? 0);
+            totalDevLabel.text = GetLabel(info?.totalRecordedTime ?? 0);
 
             // Generate days
             var daysContainers = new VisualElement[7];
@@ -190,13 +190,13 @@ namespace Meaf75.Unity{
 
             // Check if worked time is less than a second
             if(timespan.TotalSeconds < 60)
-                return (int) timespan.TotalSeconds + " s";
+                return (int) timespan.TotalSeconds + " sec";
 
             // Check if worked time is less than an hour
             if(timespan.TotalMinutes < 60)
-                return (int) timespan.TotalMinutes + " m";
+                return (int) timespan.TotalMinutes + " min";
 
-            return (int) timespan.TotalHours + " h";
+            return $"{(int) timespan.TotalHours} h\n{timespan.Minutes} min";
         }
     }
 }

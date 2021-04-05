@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,10 +15,10 @@ namespace Meaf75.Unity{
 
         TimeRecorderInfo info;
 
-        [MenuItem("Window/Meaf75/Time recorder")]
+        [MenuItem("Tools/Time recorder/Time Calendar")]
         static void Init(){
             // Get existing open window or if none, make a new one:
-            var window = (TimeRecorderWindow) GetWindow(typeof(TimeRecorderWindow));
+            var window = GetWindow<TimeRecorderWindow>();
             window.titleContent = new GUIContent("Time recorder");
 
             selectedDate = DateTime.Now;
@@ -34,7 +32,7 @@ namespace Meaf75.Unity{
 
         // This interface implementation is automatically called by Unity.
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu){
-            GUIContent content = new GUIContent("Repintar");
+            GUIContent content = new GUIContent("Repaint");
             menu.AddItem(content, false, RepaintWindow);
 
             GUIContent content2 = new GUIContent("RepaintOnlyFew");

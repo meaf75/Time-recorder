@@ -1,6 +1,12 @@
-﻿.day-container{
-    height: 80px;
-    width: 80px;
+﻿.main-content {
+    min-width: 572px;
+    min-height: 560px;
+}
+
+.day-container{
+    min-height: 80px;
+    min-width: 80px;
+    border-color: #7b7b7b
 }
 
 .hours-label-container{

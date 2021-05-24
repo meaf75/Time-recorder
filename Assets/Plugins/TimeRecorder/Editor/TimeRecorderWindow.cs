@@ -14,12 +14,17 @@ namespace Meaf75.Unity{
         public static TimeRecorderWindow Instance;
 
         TimeRecorderInfo info;
+		
+		private static readonly Vector2 windowSize = new Vector2(563,560);
 
         [MenuItem("Tools/Time recorder/Time Calendar")]
         static void Init(){
             // Get existing open window or if none, make a new one:
             var window = GetWindow<TimeRecorderWindow>();
             window.titleContent = new GUIContent("Time recorder");
+			
+			window.minSize = windowSize;
+            window.maxSize = windowSize;
 
             selectedDate = DateTime.Now;
         }

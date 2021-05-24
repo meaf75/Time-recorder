@@ -11,6 +11,7 @@ Time recoder is an Unity Editor plugin that allow you an easy way to track devel
 You can find the time recorder window at Tools/Time recorder
 
 ![Image of time recorder path](./img/time-recorder-path.png)
+
 ![Image of time recorder](./img/time-recorder.png)
 
 
@@ -20,6 +21,7 @@ You can find the time recorder window at Tools/Time recorder
 # Time recorder tools
 
 You can find the time recorder tools at Tools/Time recorder tools
+
 ![Image of time recorder tools path](./img/time-recorder-tools-path.png)
 
 - In the case you want to make a backup of you "time recorder" data you can make a file backup with the "Generate backup" option.

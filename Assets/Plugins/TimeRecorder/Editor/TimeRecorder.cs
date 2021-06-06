@@ -23,8 +23,12 @@ namespace Meaf75.Unity{
 
         private string registry_json;
 
+        public static bool isPaused;
 
         static TimeRecorder(){
+
+            isPaused = PlayerPrefs.GetInt(TimeRecorderExtras.TIME_RECORDER_PAUSE_P_PREF,0) == 1 ;
+
             // Restore callbacks
             EditorApplication.update += TimeRecorderUpdate;
             EditorApplication.quitting += () => SaveTimeRecorded(false);
@@ -32,6 +36,9 @@ namespace Meaf75.Unity{
 
         /// <summary> Update plugin in unity editor update event </summary>
         private static void TimeRecorderUpdate(){
+
+            if (isPaused)
+                return;
 
             // Initialize to start Time recorder
             InitializeSaveTime();

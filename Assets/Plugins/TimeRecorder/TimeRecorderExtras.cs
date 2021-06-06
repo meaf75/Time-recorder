@@ -51,6 +51,12 @@ namespace Meaf75.Unity{
 
         public const string CORRUPTED_JSON_BACKUP = "corrupted_time_recorder_json_{0}.json";
         public const string TIME_RECORDER_WINDOW_P_PREF = "time_recorder_window_player_pref";
+
+        public const string TIME_RECORDER_PAUSE_P_PREF = "time_recorder_pause";
+
+        public static string GetPauseButtonLabelForState(bool paused) {
+            return  paused ? "Resume ▶" : "Pause ▯▯";
+        }
     }
 }
 

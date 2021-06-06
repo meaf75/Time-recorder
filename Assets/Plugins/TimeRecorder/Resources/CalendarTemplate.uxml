@@ -9,9 +9,14 @@
                 <Button name="btn-next-month" text="→"/>
             </VisualElement>
 
-            <VisualElement class="total-time-labels-container">
-                <Label class="dev-time-label" text="Total dev time: "/>
-                <Label name="label-total-dev-time"  class="label-total-dev-time" text="0 h"/>
+            <VisualElement class="header-left-side">
+
+                <Button name="time-recorder-state-btn" text="PAUSE"/>
+
+                <VisualElement class="total-time-labels-container">
+                    <Label class="dev-time-label" text="Total dev time: "/>
+                    <Label name="label-total-dev-time"  class="label-total-dev-time" text="0 h"/>
+                </VisualElement>
             </VisualElement>
         </VisualElement>
 

@@ -4,6 +4,8 @@ Time recoder is an Unity Editor plugin that allow you an easy way to track devel
 <br/>
 
 # Instructions/requirements
+
+- Install via  Asset store:[![Image of time recorder path](./img/asset-store.webp)](https://assetstore.unity.com/packages/add-ons/time-recorder-190927)
 - Easy way: install via [TimeRecorder.unitypackage](./TimeRecorder.unitypackage)
 - Make sure only copy repo assets folder into your assets/plugins folder inside your project
 - Have installed UIElements package for unity
@@ -38,5 +40,6 @@ You can find the time recorder tools at Tools/Time recorder tools
 - You can change between months with the arrow buttons located in the window header.
 - Month name is displayed according user os language location.
 - In case of try to repaint window, you can find a custom menu option into the 3 dots window button and force repaint.
+- Now you can  pause the time recorder actions
 
 ![Image of time recorder repaint path](./img/repaint-option.png)

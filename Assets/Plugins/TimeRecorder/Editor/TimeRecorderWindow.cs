@@ -19,9 +19,12 @@ namespace Meaf75.Unity{
 
         [MenuItem("Tools/Time recorder/Time Calendar")]
         static void Init(){
+
+            var runningStateLabel = TimeRecorder.isPaused ? "Paused" : "Running";
+
             // Get existing open window or if none, make a new one:
             var window = GetWindow<TimeRecorderWindow>();
-            window.titleContent = new GUIContent("Time recorder");
+            window.titleContent = new GUIContent($"Time recorder ({runningStateLabel})");
 			
 			window.minSize = windowSize;
             window.maxSize = windowSize;
@@ -55,7 +58,6 @@ namespace Meaf75.Unity{
         private void DrawWindow(){
 
             VisualElement root = rootVisualElement;
-            var window = (TimeRecorderWindow) GetWindow(typeof(TimeRecorderWindow));
             info = TimeRecorder.LoadTimeRecorderInfoFromRegistry();
 
             var timeRecorderTemplate = Resources.Load<VisualTreeAsset>("CalendarTemplate");
@@ -76,9 +78,13 @@ namespace Meaf75.Unity{
             // Fix buttons action
             var prevMonthBtn = root.Q<Button>("btn-prev-month");
             var nextMonthBtn = root.Q<Button>("btn-next-month");
+            var timeRecorderPauseStateBtn = root.Q<Button>("time-recorder-state-btn");
 
             prevMonthBtn.clicked += () => ChangeMonthOffset(-1);
             nextMonthBtn.clicked += () => ChangeMonthOffset(1);
+            timeRecorderPauseStateBtn.clicked += ChangeTimeRecorderPauseState;
+
+            timeRecorderPauseStateBtn.text = TimeRecorderExtras.GetPauseButtonLabelForState(TimeRecorder.isPaused).ToUpperInvariant();
 
             // Set total label dev time
             var totalDevLabel = root.Q<Label>("label-total-dev-time");
@@ -200,6 +206,24 @@ namespace Meaf75.Unity{
                 return (int) timespan.TotalMinutes + " min";
 
             return $"{(int) timespan.TotalHours} h\n{timespan.Minutes} min";
+        }
+
+
+        private void ChangeTimeRecorderPauseState() {
+            TimeRecorderTools.ChangeTimeRecorderPauseState(!TimeRecorder.isPaused);
+        }
+
+        /// <summary> Update visual elements from this window </summary>
+        /// <param name="paused">is time recorder paused?</param>
+        public void UpdatePausedState(bool paused) {
+            TimeRecorder.isPaused = paused;
+
+            var runningStateLabel = TimeRecorder.isPaused ? "Paused" : "Running";
+
+            var timeRecorderPauseStateBtn = rootVisualElement.Q<Button>("time-recorder-state-btn");
+            timeRecorderPauseStateBtn.text = TimeRecorderExtras.GetPauseButtonLabelForState(TimeRecorder.isPaused).ToUpperInvariant();
+
+            GetWindow<TimeRecorderWindow>().titleContent = new GUIContent($"Time recorder ({runningStateLabel})");
         }
     }
 }

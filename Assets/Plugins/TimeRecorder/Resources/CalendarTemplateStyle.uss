@@ -30,6 +30,11 @@
     margin: 10px;
 }
 
+.header-left-side {
+    display: flex;
+    flex-direction: row;
+}
+
 .month-selector{
     display: flex;
     flex-direction: row;

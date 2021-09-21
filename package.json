@@ -2,7 +2,7 @@
 {
     "name": "com.meaf75.time-recorder",
     "displayName": "Time Recorder",
-    "version": "0.0.9",
+    "version": "1.0.0",
     "unity": "2018.1",
     "description": "Time recoder is an Unity Editor plugin that allow you an easy way to track develop work time while unity editor is open, track your develop time per project while this plugin is imported.",
     "keywords": [ "unity", "time", "recorder" ],

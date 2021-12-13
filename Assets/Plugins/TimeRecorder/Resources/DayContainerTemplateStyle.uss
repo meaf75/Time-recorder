@@ -1,6 +1,5 @@
-﻿.main-content {
-    min-width: 572px;
-    min-height: 560px;
+﻿.action-button-active {
+    display: initial;
 }
 
 .day-container{
@@ -9,9 +8,29 @@
     border-color: #7b7b7b
 }
 
+.display-element {
+    display: initial;
+}
+
+.no-display-element {
+    display: none;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 21px;
+}
+
 .hours-label-container{
     -unity-text-align: middle-center;
     flex-grow: 1;
     display: flex;
     justify-content: center;
+}
+
+.main-content {
+    min-width: 572px;
+    min-height: 560px;
 }

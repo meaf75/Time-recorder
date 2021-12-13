@@ -17,7 +17,7 @@
                     <Label class="dev-time-label" text="Total dev time: "/>
                     <Label name="label-total-dev-time"  class="label-total-dev-time" text="0 h"/>
                 </VisualElement>
-            </VisualElement>
+            </VisualElement>            
         </VisualElement>
 
         <!--    Days Container-->

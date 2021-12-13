@@ -97,69 +97,14 @@ namespace Meaf75.Unity{
 
             #region Validate timeRecorderInfo object
             var currentTime = DateTime.Now;
-
-            // Save time
-            if(timeRecorderInfo.years == null){
-                timeRecorderInfo.years = new List<YearInfo>();
-            }
-
-            var yearInfoIdx = timeRecorderInfo.years.FindIndex(y => y.year == currentTime.Year);
-            var yearInfo = new YearInfo();
-
-            if(yearInfoIdx == -1){
-                // Create & setup year
-                yearInfo.year = currentTime.Year;
-                yearInfo.months = new List<MonthInfo>();
-                timeRecorderInfo.years.Add(yearInfo);
-            } else{
-                // Find year
-                yearInfo = timeRecorderInfo.years[yearInfoIdx];
-            }
-
-            // Initialize year months
-            if(yearInfo.months == null){
-                yearInfo.months = new List<MonthInfo>();
-            }
-
-            var monthInfoIdx = yearInfo.months.FindIndex(m => m.month == currentTime.Month);
-            var monthInfo = new MonthInfo();
-
-            if(monthInfoIdx == -1){
-                // Create & setup month
-                monthInfo.month = currentTime.Month;
-                monthInfo.dates = new List<DateInfo>();
-                yearInfo.months.Add(monthInfo);
-            } else{
-                // Find moth
-                monthInfo = yearInfo.months[monthInfoIdx];
-            }
-
-            // Initialize month dates
-            if(monthInfo.dates == null){
-                monthInfo.dates = new List<DateInfo>();
-            }
-
-            var dateInfoIdx = monthInfo.dates.FindIndex(m => m.date == currentTime.Day);
-            var dateInfo = new DateInfo();
-
-            if(dateInfoIdx == -1){
-                // Create & setup day
-                dateInfo.date = currentTime.Day;
-                dateInfo.timeInSeconds = 0;
-                dateInfoIdx = monthInfo.dates.Count;
-                monthInfo.dates.Add(dateInfo);
-            } else{
-                // Find day
-                dateInfo = monthInfo.dates[dateInfoIdx];
-            }
+            var dateTimeInfo = timeRecorderInfo.VerifyByDatetime(currentTime);
             #endregion
 
             int secondsToAdd = saveOnMinutes * 60;
 
             if(countdownCompleted){
                 // Add time reference for current date
-                dateInfo.timeInSeconds += secondsToAdd;
-                monthInfo.dates[dateInfoIdx] = dateInfo;
+                dateTimeInfo.dayInfo.timeInSeconds += secondsToAdd;
             } else{
                 if(EditorApplication.timeSinceStartup < saveOnMinutes * 60){
                     // Editor recently oppened so i should save EditorApplication.timeSinceStartup
@@ -178,18 +123,21 @@ namespace Meaf75.Unity{
             timeRecorderInfo.totalRecordedTime += secondsToAdd;
 
             // Save the registry
-            timeRecorderJson = JsonUtility.ToJson(timeRecorderInfo);
-
-            PlayerPrefs.SetString(TimeRecorderExtras.TIME_RECORDER_REGISTRY, timeRecorderJson);
-            PlayerPrefs.Save();
-
-            if(TimeRecorderWindow.Instance)
-                TimeRecorderWindow.Instance.RepaintWindow();
+            SaveTimeRecorded(timeRecorderInfo);
 
             Debug.Log("Your develop time has been tracked");
             return true;
         }
 
+        public static void SaveTimeRecorded(TimeRecorderInfo info) {
+            // Save the registry
+            PlayerPrefs.SetString(TimeRecorderExtras.TIME_RECORDER_REGISTRY, JsonUtility.ToJson(info));
+            PlayerPrefs.Save();
+
+            if(TimeRecorderWindow.Instance)
+                TimeRecorderWindow.Instance.RepaintWindow();
+        }
+        
         private static TimeRecorderInfo InitializeTimeRecorder(){
 
             Debug.Log("Inicializando time recorder");
@@ -256,10 +204,7 @@ namespace Meaf75.Unity{
         }
 
         /// <summary> Calculate new save time </summary>
-        private static string ReCalculateNextSave(){
-
-//            Debug.Log("Haciendo la recalculacion");
-
+        public static string ReCalculateNextSave(){
             // Create new reference of the next save time
             nextSaveTime = DateTime.Now;
             nextSaveTime = nextSaveTime.AddSeconds(saveOnMinutes * 60);

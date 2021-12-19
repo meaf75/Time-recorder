@@ -263,6 +263,11 @@ namespace Meaf75.Unity{
 
         private void OnPressEditBtn(VisualElement dayElement) {
 
+            if (info == null) {
+                // Can be null the first time
+                info = new TimeRecorderInfo();
+            }
+            
             var editContainer = dayElement.Q<VisualElement>(DayContainerTemplateNames.EDIT_DAY_CONTAINER);
             var editBtn = dayElement.Q<Button>(DayContainerTemplateNames.EDIT_BTN);
             var labelHours = dayElement.Q<Label>(DayContainerTemplateNames.LABEL_HOURS);
